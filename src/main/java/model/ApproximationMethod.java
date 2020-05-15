@@ -151,6 +151,68 @@ public class ApproximationMethod {
         return result;
     }
 
+    public String indicative(Double[][] data) {
+        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
+            sum[0] += x; //x
+            sum[1] += Math.pow(x,2); //x2
+            sum[2] += Math.log(y); //lny
+            sum[3] += x * sum[2]; //xlny
+        }
+
+        double b =  Precision.round(Math.exp((data.length * sum[3] - sum[0] * sum[2]) / (data.length * sum[1] - Math.pow(sum[0],2))),5);
+        double a =  Precision.round(Math.exp(1.0/data.length * sum[2] - Math.log(b)/data.length * sum[0]),5);
+        return a +"*" + b + "^ x";
+    }
+
+    public String log(Double[][] data) {
+        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
+            sum[0] += y * Math.log(x); //ylnx
+            sum[1] += Math.log(x); //lnx
+            sum[2] += y; //y
+            sum[3] += Math.pow(Math.log(x),2); //ln2x
+        }
+
+        double b =  Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1],2)),5);
+        double a =  Precision.round(1.0/data.length * sum[2] - b/data.length * sum[1],5);
+        String result =a+"";
+        if (b >= 0) {
+            result+="+"+b +"*log(x)";
+        } else if (b!=0) {
+            result+=b+"*log(x)";
+        }
+         return result;
+    }
+
+    public String exp(Double[][] data) {
+        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
+            sum[0] += x * Math.log(y); //xlny
+            sum[1] += x; //x
+            sum[2] += Math.log(y); //lny
+            sum[3] +=Math.pow(x,2); //x2
+        }
+
+        double b =  Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1],2)),5);
+        double a =  Precision.round(1.0/data.length * sum[2] - b/data.length * sum[1],5);
+        String result ="e^("+a;
+        if (b >= 0) {
+                result+="+"+b+"* x)";
+            } else if (b!=0){
+                result+=b +"* x)";
+            }
+        return result;
+    }
+
 
     private double determinant(Double[][] a) {
         double sum = a[0][0]*(a[1][1]*a[2][2]-a[1][2]*a[2][1]);

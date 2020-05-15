@@ -15,6 +15,9 @@ public class TableView {
     private JRadioButton squareApproximation;
     private JRadioButton powerApproximation;
     private JRadioButton hyperbolaApproximation;
+    private JRadioButton expApproximation;
+    private JRadioButton logApproximation;
+    private JRadioButton indicativeApproximation;
 
     public TableView(int width, int height, int sizeTable){
         this.width=width;
@@ -51,6 +54,9 @@ public class TableView {
         squareApproximation = new JRadioButton("Квадратичная аппроксимация");
         powerApproximation = new JRadioButton("Степенная аппроксимация");
         hyperbolaApproximation = new JRadioButton("Гиперболическая аппроксимация");
+        indicativeApproximation = new JRadioButton("Показательная аппроксимация");
+        logApproximation = new JRadioButton("Логарифмическая аппроксимация");
+        expApproximation = new JRadioButton("Экспонециальная аппроксимация");
 
         JPanel functionTypePanel = new JPanel();
         functionTypePanel.setLayout(new GridLayout(0,1));
@@ -60,10 +66,16 @@ public class TableView {
         buttonGroup.add(squareApproximation);
         buttonGroup.add(powerApproximation);
         buttonGroup.add(hyperbolaApproximation);
+        buttonGroup.add(indicativeApproximation);
+        buttonGroup.add(expApproximation);
+        buttonGroup.add(logApproximation);
         functionTypePanel.add(linearApproximation);
         functionTypePanel.add(squareApproximation);
         functionTypePanel.add(powerApproximation);
         functionTypePanel.add(hyperbolaApproximation);
+        functionTypePanel.add(indicativeApproximation);
+        functionTypePanel.add(expApproximation);
+        functionTypePanel.add(logApproximation);
 
         linearApproximation.setSelected(true);
 
@@ -122,5 +134,17 @@ public class TableView {
 
     public JRadioButton getHyperbolaApproximation() {
         return hyperbolaApproximation;
+    }
+
+    public JRadioButton getExpApproximation() {
+        return expApproximation;
+    }
+
+    public JRadioButton getIndicativeApproximation() {
+        return indicativeApproximation;
+    }
+
+    public JRadioButton getLogApproximation() {
+        return logApproximation;
     }
 }
