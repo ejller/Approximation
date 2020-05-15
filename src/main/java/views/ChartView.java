@@ -8,6 +8,10 @@ import java.awt.*;
 public class ChartView {
     private JFrame window;
     private JPanel jPanel;
+    private JButton button;
+    private JTextField coefficientField;
+    private JLabel coefficientFunction1Label;
+    private JLabel coefficientFunction2Label;
 
     public ChartView(Double[][] data, String function1, String function2, int dropId){
         setElement(data, function1, function2, dropId);
@@ -39,17 +43,39 @@ public class ChartView {
         descriptionFunction2Label.setFont(new Font(descriptionFunction2Label.getFont().getName(), Font.BOLD, 13));
         JLabel descriptionPointDropLabel = new JLabel("Координаты исключенной точки: ("+data[dropId][0]+"; "+data[dropId][1]+")");
 
-        JLabel descriptionCoefficientLabel = new JLabel("");
+        coefficientFunction1Label = new JLabel("");
+        coefficientFunction2Label = new JLabel("");
 
-        JTextField coefficientField = new JTextField(15);
-
+        JLabel descriptionCoefficientLabel = new JLabel("Введите номер точки, чтобы посмотреть ее значение в каждой функции: ");
+        coefficientField = new JTextField(15);
+        button = new JButton("Посмотреть");
 
         descriptionPanel.add(descriptionFunction1Label);
         descriptionPanel.add(descriptionFunction2Label);
         descriptionPanel.add(descriptionPointDropLabel);
+        descriptionPanel.add(coefficientFunction1Label);
+        descriptionPanel.add(coefficientFunction2Label);
+        descriptionPanel.add(descriptionCoefficientLabel);
+        descriptionPanel.add(coefficientField);
+        descriptionPanel.add(button);
 
         baseConstraints.gridx=1;
         jPanel.add(descriptionPanel, baseConstraints);
     }
 
+    public JTextField getCoefficientField() {
+        return coefficientField;
+    }
+
+    public JLabel getCoefficientFunction1Label() {
+        return coefficientFunction1Label;
+    }
+
+    public JLabel getCoefficientFunction2Label() {
+        return coefficientFunction2Label;
+    }
+
+    public JButton getButton() {
+        return button;
+    }
 }

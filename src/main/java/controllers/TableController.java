@@ -3,12 +3,12 @@ package controllers;
 import model.ApproximationMethod;
 import views.TableView;
 
-public class TableController {
+class TableController {
     private TableView view;
-    int size;
-    int dropId;
+    private int size;
+    private int dropId;
 
-    public TableController(int size){
+    TableController(int size){
         this.size = size;
         view = new TableView(600,300, size);
         addActionListener();

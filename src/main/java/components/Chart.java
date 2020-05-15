@@ -18,7 +18,6 @@ public class Chart extends JPanel {
     private double coefficientY;
     private int centerX;
     private int centerY;
-    private int stepX=1;
     private int offsetX=20;
     private int offsetY=20;
     private Expression formula1;
@@ -134,7 +133,8 @@ public class Chart extends JPanel {
         int fromX = -this.centerX;
         int toX = Math.abs(this.centerX) + this.plotWidth;
 
-        for(int x = fromX; x<toX; x+=stepX)  {
+        int stepX = 1;
+        for(int x = fromX; x<toX; x+= stepX)  {
             double tx = (double) x / this.coefficientX;
             Double ty1 = null;
             Double ty2 = null;

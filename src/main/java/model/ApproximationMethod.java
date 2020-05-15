@@ -10,7 +10,7 @@ public class ApproximationMethod {
 
     public int findDropPointId(Double[][] points, String formula) {
         Expression expression = new ExpressionBuilder(formula).variable("x").build();
-        Double maxDelta = 0.0;
+        double maxDelta = 0.0;
         int idx = 1;
         for (int i = 0; i<points.length; i++) {
             Double x = points[i][0];
@@ -25,27 +25,30 @@ public class ApproximationMethod {
 
     public String linear(Double[][] data){
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (int i = 0; i < data.length; i++) {
-            sum[0] += data[i][0]; //x
-            sum[1] += data[i][1]; //y
+        for (Double[] datum : data) {
+            sum[0] += datum[0]; //x
+            sum[1] += datum[1]; //y
             sum[2] += sum[0] * sum[1]; //xy
             sum[3] += Math.pow(sum[0], 2.0); //x2
         }
         double del = Math.pow(sum[0], 2.0) - data.length * sum[3];
         double a =  Precision.round((sum[0] * sum[1] - data.length * sum[2]) / del, 5);
         double b =  Precision.round((sum[0] * sum[2] - sum[3] * sum[1]) / del, 5);
-        if (b >= 0) {
-            return a+"*x+"+b;
-        } else {
-            return a+"*x"+b;
+        String result = "";
+        result+=a+"*x";
+        if (b > 0) {
+            result+= "+"+b;
+        } else if (b != 0){
+            result+=b;
         }
+        return result;
     }
 
     public String square(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        for (int i = 0; i < data.length; i++) {
-            double x = data[i][0];
-            double y = data[i][1];
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
             sum[0] += x; //x
             sum[1] += y; //y
             sum[2] += Math.pow(x, 2.0); //x2
@@ -90,15 +93,16 @@ public class ApproximationMethod {
         double a =  Precision.round(da / d,5);
         double b =  Precision.round(db / d,5);
         double c =  Precision.round(dc / d,5);
-        String result = a+"*x^2";
-        if (b >= 0) {
+        String result ="";
+        result =a+"*x^2";
+        if (b > 0) {
             result += "+"+b+"*x";
-        } else {
+        } else if(b!=0){
             result += b+"*x";
         }
-        if (c >= 0) {
+        if (c > 0) {
             result += "+"+c;
-        } else {
+        } else if (c!=0){
             result += c;
         }
         return result;
@@ -106,9 +110,9 @@ public class ApproximationMethod {
 
     public String power(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (int i = 0; i < data.length; i++) {
-            double x = data[i][0];
-            double y = data[i][1];
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
             sum[0] += Math.log(x); //x
             sum[1] += Math.log(y); //y
             sum[2] += Math.pow(Math.log(x), 2); //x2
@@ -117,15 +121,17 @@ public class ApproximationMethod {
 
         double b =  Precision.round((data.length * sum[3] - sum[0] * sum[1]) / (data.length * sum[2] - Math.pow(sum[0],2)), 5);
         double a =  Precision.round(Math.exp(1.0 / data.length * sum[1] - b / data.length * sum[0]), 5);
+        if (a!=0)
         return a+ "* x ^ "+b;
+        return "0";
     }
 
 
     public String hyperbola(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (int i = 0; i < data.length; i++) {
-            double x = data[i][0];
-            double y = data[i][1];
+        for (Double[] datum : data) {
+            double x = datum[0];
+            double y = datum[1];
             sum[0] += 1 / x; //x
             sum[1] += 1 / Math.pow(x, 2.0); //x2
             sum[2] += y / x; //yx
@@ -134,11 +140,15 @@ public class ApproximationMethod {
 
         double b =  Precision.round((data.length * sum[2] - sum[0] * sum[3]) / (data.length * sum[1] - Math.pow(sum[0], 2)), 5);
         double a =  Precision.round(1.0 / data.length * sum[3] - b / data.length * sum[0], 5);
+        String result = "";
+        result+=a;
+
         if (b > 0) {
-            return a + "+" + b + "/x";
-        } else {
-            return a + "" + b + "/x";
+            result+= "+" + b + "/x";
+        } else if (b!=0){
+            result+= b + "/x";
         }
+        return result;
     }
 
 
