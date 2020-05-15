@@ -30,7 +30,6 @@ public class ChartView {
         jPanel = new JPanel();
         jPanel.setLayout(new GridBagLayout());
         GridBagConstraints baseConstraints = new GridBagConstraints();
-
         jPanel.add(new Chart(500,500, function1, function2, dropId, data), baseConstraints);
 
         JPanel descriptionPanel = new JPanel();
