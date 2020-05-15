@@ -47,11 +47,12 @@ class TableController {
             function = approximationMethod.square(data);
         } else if (view.getExpApproximation().isSelected()){
             function = approximationMethod.exp(data);
-        } else if (view.getLogApproximation().isSelected()){
+        } else if (view.getLogApproximation().isSelected()) {
             function = approximationMethod.log(data);
-        } else if (view.getIndicativeApproximation().isSelected()){
-            function = approximationMethod.indicative(data);
         }
+//        } else if (view.getIndicativeApproximation().isSelected()){
+//            function = approximationMethod.indicative(data);
+//        }
         return function;
     }
 

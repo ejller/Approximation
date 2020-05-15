@@ -54,7 +54,7 @@ public class TableView {
         squareApproximation = new JRadioButton("Квадратичная аппроксимация");
         powerApproximation = new JRadioButton("Степенная аппроксимация");
         hyperbolaApproximation = new JRadioButton("Гиперболическая аппроксимация");
-        indicativeApproximation = new JRadioButton("Показательная аппроксимация");
+        //indicativeApproximation = new JRadioButton("Показательная аппроксимация");
         logApproximation = new JRadioButton("Логарифмическая аппроксимация");
         expApproximation = new JRadioButton("Экспонециальная аппроксимация");
 
@@ -66,14 +66,14 @@ public class TableView {
         buttonGroup.add(squareApproximation);
         buttonGroup.add(powerApproximation);
         buttonGroup.add(hyperbolaApproximation);
-        buttonGroup.add(indicativeApproximation);
+        //buttonGroup.add(indicativeApproximation);
         buttonGroup.add(expApproximation);
         buttonGroup.add(logApproximation);
         functionTypePanel.add(linearApproximation);
         functionTypePanel.add(squareApproximation);
         functionTypePanel.add(powerApproximation);
         functionTypePanel.add(hyperbolaApproximation);
-        functionTypePanel.add(indicativeApproximation);
+        //functionTypePanel.add(indicativeApproximation);
         functionTypePanel.add(expApproximation);
         functionTypePanel.add(logApproximation);
 

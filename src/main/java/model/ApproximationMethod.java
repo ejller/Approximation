@@ -23,23 +23,45 @@ public class ApproximationMethod {
         return idx;
     }
 
-    public String linear(Double[][] data){
+//    public String linear(Double[][] data){
+//        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+//        for (Double[] datum : data) {
+//            sum[0] += datum[0]; //x
+//            sum[1] += datum[1]; //y
+//            sum[2] += sum[0] * sum[1]; //xy
+//            sum[3] += Math.pow(sum[0], 2.0); //x2
+//        }
+//        double del = Math.pow(sum[0], 2.0) - data.length * sum[3];
+//        double a =  Precision.round((sum[0] * sum[1] - data.length * sum[2]) / del, 5);
+//        double b =  Precision.round((sum[0] * sum[2] - sum[3] * sum[1]) / del, 5);
+//        String result = "";
+//        result+=a+"*x";
+//        if (b > 0) {
+//            result+= "+"+b;
+//        } else if (b != 0){
+//            result+=b;
+//        }
+//        return result;
+//    }
+
+
+    public String linear(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
         for (Double[] datum : data) {
             sum[0] += datum[0]; //x
             sum[1] += datum[1]; //y
-            sum[2] += sum[0] * sum[1]; //xy
-            sum[3] += Math.pow(sum[0], 2.0); //x2
+            sum[2] += datum[0] * datum[1]; //xy
+            sum[3] += Math.pow(datum[0], 2.0); //x2
         }
-        double del = Math.pow(sum[0], 2.0) - data.length * sum[3];
-        double a =  Precision.round((sum[0] * sum[1] - data.length * sum[2]) / del, 5);
-        double b =  Precision.round((sum[0] * sum[2] - sum[3] * sum[1]) / del, 5);
+        int n = data.length;
+        double a = Precision.round((n*sum[2] - sum[0]*sum[1]) / (n*sum[3] - Math.pow(sum[0], 2)),5);
+        double b =  Precision.round((sum[1] - a * sum[0]) / n, 5);
         String result = "";
-        result+=a+"*x";
+        result += a + "*x";
         if (b > 0) {
-            result+= "+"+b;
-        } else if (b != 0){
-            result+=b;
+            result += "+" + b;
+        } else if (b != 0) {
+            result += b;
         }
         return result;
     }
@@ -151,22 +173,22 @@ public class ApproximationMethod {
         return result;
     }
 
-    public String indicative(Double[][] data) {
-        Double[] sum = {0.0, 0.0, 0.0, 0.0};
-
-        for (Double[] datum : data) {
-            double x = datum[0];
-            double y = datum[1];
-            sum[0] += x; //x
-            sum[1] += Math.pow(x,2); //x2
-            sum[2] += Math.log(y); //lny
-            sum[3] += x * sum[2]; //xlny
-        }
-
-        double b =  Precision.round(Math.exp((data.length * sum[3] - sum[0] * sum[2]) / (data.length * sum[1] - Math.pow(sum[0],2))),5);
-        double a =  Precision.round(Math.exp(1.0/data.length * sum[2] - Math.log(b)/data.length * sum[0]),5);
-        return a +"*" + b + "^ x";
-    }
+//    public String indicative(Double[][] data) {
+//        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+//
+//        for (Double[] datum : data) {
+//            double x = datum[0];
+//            double y = datum[1];
+//            sum[0] += x; //x
+//            sum[1] += Math.pow(x,2); //x2
+//            sum[2] += Math.log(y); //lny
+//            sum[3] += x * sum[2]; //xlny
+//        }
+//
+//        double b =  Precision.round(Math.exp((data.length * sum[3] - sum[0] * sum[2]) / (data.length * sum[1] - Math.pow(sum[0],2))),5);
+//        double a =  Precision.round(Math.exp(1.0/data.length * sum[2] - Math.log(b)/data.length * sum[0]),5);
+//        return a +"*" + b + "^ x";
+//    }
 
     public String log(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
