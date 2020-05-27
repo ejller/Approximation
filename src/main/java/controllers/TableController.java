@@ -1,13 +1,14 @@
 package controllers;
 
 import model.ApproximationMethod;
+import util.Method;
 import views.TableView;
 
 class TableController {
     private TableView view;
     private int size;
     private int dropId;
-
+    private Method method;
     TableController(int size){
         this.size = size;
         view = new TableView(600,300, size);
@@ -19,7 +20,7 @@ class TableController {
             Double[][] data = dataProcessing();
             String function1 = getFunction(data);
             String function2 = getFunction(dropPoint(data,function1));
-            new ChartController(data, function1, function2, dropId);
+            new ChartController(data, function1, function2, dropId, method);
 
 
         });
@@ -39,16 +40,22 @@ class TableController {
         String function ="";
         if (view.getLinearApproximation().isSelected()) {
             function = approximationMethod.linear(data);
+            method = Method.LINEAR;
         } else if (view.getHyperbolaApproximation().isSelected()){
             function = approximationMethod.hyperbola(data);
+            method = Method.HYPERBOLA;
         } else if (view.getPowerApproximation().isSelected()){
             function = approximationMethod.power(data);
+            method = Method.POWER;
         } else if (view.getSquareApproximation().isSelected()){
             function = approximationMethod.square(data);
+            method = Method.SQUARE;
         } else if (view.getExpApproximation().isSelected()){
             function = approximationMethod.exp(data);
+            method = Method.EXP;
         } else if (view.getLogApproximation().isSelected()) {
             function = approximationMethod.log(data);
+            method = Method.LOG;
         }
 //        } else if (view.getIndicativeApproximation().isSelected()){
 //            function = approximationMethod.indicative(data);

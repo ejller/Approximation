@@ -44,6 +44,28 @@ public class ApproximationMethod {
         return result;
     }
 
+
+//    public String linear(Double[][] data) {
+//        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+//        for (Double[] datum : data) {
+//            sum[0] += datum[0]; //x
+//            sum[1] += datum[1]; //y
+//            sum[2] += datum[0] * datum[1]; //xy
+//            sum[3] += Math.pow(datum[0], 2.0); //x2
+//        }
+//        int n = data.length;
+//        double a = Precision.round((n*sum[2] - sum[0]*sum[1]) / (n*sum[3] - Math.pow(sum[0], 2)),5);
+//        double b =  Precision.round((sum[1] - a * sum[0]) / n, 5);
+//        String result = "";
+//        result += a + "*x";
+//        if (b > 0) {
+//            result += "+" + b;
+//        } else if (b != 0) {
+//            result += b;
+//        }
+//        return result;
+//    }
+
     public String square(Double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         for (Double[] datum : data) {
@@ -119,8 +141,8 @@ public class ApproximationMethod {
             sum[3] += Math.log(x) * Math.log(y); //xy
         }
 
-        double b =  Precision.round((data.length * sum[3] - sum[0] * sum[1]) / (data.length * sum[2] - Math.pow(sum[0],2)), 5);
-        double a =  Precision.round(Math.exp(1.0 / data.length * sum[1] - b / data.length * sum[0]), 5);
+        double b =  Precision.round((data.length * sum[3] - sum[0] * sum[1]) / (data.length * sum[2] - Math.pow(sum[0],2)), 10);
+        double a =  Precision.round(Math.exp(1.0 / data.length * sum[1] - b / data.length * sum[0]), 10);
         if (a!=0)
         return a+ "* x ^ "+b;
         return "0";

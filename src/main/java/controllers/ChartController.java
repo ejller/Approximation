@@ -2,6 +2,7 @@ package controllers;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import util.Method;
 import views.ChartView;
 
 class ChartController {
@@ -11,31 +12,45 @@ class ChartController {
     private String function2;
     private Double[][] data;
 
-    ChartController(Double[][] data, String function1, String function2, int dropId){
+    ChartController(Double[][] data, String function1, String function2, int dropId, Method method){
         this.function1=function1;
         this.function2=function2;
         this.data = data;
-        view = new ChartView(data,function1, function2, dropId);
+        view = new ChartView(data,function1, function2, dropId, method);
         addActionListener();
     }
 
     private void addActionListener() {
         view.getButton().addActionListener(li -> {
-            double x = data[Integer.parseInt(view.getCoefficientField().getText())-1][0];
-            view.getCoefficientFunction1Label().setText("Для зеленого графика: "+getCoefficient(x, function1));
-            view.getCoefficientFunction2Label().setText("Для синего графика: "+getCoefficient(x, function2));
+            Double x;
+            try {
+                x = Double.parseDouble(view.getCoefficientField().getText());
+            } catch (NumberFormatException e) {
+                view.getCoefficientFunction1Label().setText("Недопустимое значение x");
+                return;
+            }
+            try {
+                Double value = getCoefficient(x, function1);
+                view.getCoefficientFunction1Label().setText("Значение до апроксимации: "+value);
+            } catch (ArithmeticException e) {
+                view.getCoefficientFunction1Label().setText("Недопустимое значение x");
+            }
+
+            try {
+                Double value = getCoefficient(x, function2);
+                view.getCoefficientFunction2Label().setText("Значение после апроксимации: "+value);
+            } catch (ArithmeticException e) {
+                view.getCoefficientFunction2Label().setText("Недопустимое значение x");
+            }
+
         });
     }
 
-    private Double getCoefficient(double x, String function){
-        try {
+    private Double getCoefficient(double x, String function) throws ArithmeticException{
             Expression e = new ExpressionBuilder(function)
                     .variables("x")
                     .build()
                     .setVariable("x", x);
             return (e.evaluate());
-        } catch (java.lang.ArithmeticException e){
-            return 0.0;
-        }
     }
 }
