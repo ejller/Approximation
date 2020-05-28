@@ -37,11 +37,11 @@ public class Chart {
 
 
     public Chart(double[][] data, String function1, String function2, int dropId, Method method) {
-        this.data=data;
-        this.function1=function1;
-        this.function2=function2;
-        this.dropId=dropId;
-        this.method=method;
+        this.data = data;
+        this.function1 = function1;
+        this.function2 = function2;
+        this.dropId = dropId;
+        this.method = method;
         createComponent();
     }
 
@@ -131,8 +131,8 @@ public class Chart {
         double[] yEx = new double[1];
         double[] xEx = new double[1];
         int inc = 0;
-        for (int i = 0; i<data.length; i++) {
-            if (i!=dropId) {
+        for (int i = 0; i < data.length; i++) {
+            if (i != dropId) {
                 xIn[inc] = data[i][0];
                 yIn[inc] = data[i][1];
                 inc++;
@@ -153,8 +153,8 @@ public class Chart {
                 "Графики",
                 "X",
                 "Y",
-                 points,
-                 PlotOrientation.VERTICAL,
+                points,
+                PlotOrientation.VERTICAL,
                 true,
                 true,
                 false
@@ -176,11 +176,11 @@ public class Chart {
     }
 
     private double[][] getLeftAndRightBorders() {
-        double max = (double)-Integer.MAX_VALUE;
-        double min = (double)Integer.MAX_VALUE;
+        double max = (double) -Integer.MAX_VALUE;
+        double min = (double) Integer.MAX_VALUE;
         for (double[] i : data) {
-                if (i[0]>max) max = i[0];
-                if (i[0]<min) min = i[0];
+            if (i[0] > max) max = i[0];
+            if (i[0] < min) min = i[0];
         }
         return new double[][]{{max, min}};
     }
@@ -217,7 +217,6 @@ public class Chart {
     public JButton getButton() {
         return button;
     }
-
 
 
 }
