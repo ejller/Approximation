@@ -22,8 +22,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public class ChartView {
-    private JFrame window;
+public class Chart {
     private JPanel jPanel;
     private JButton button;
     private JTextField coefficientField;
@@ -31,19 +30,11 @@ public class ChartView {
     private JLabel coefficientFunction2Label;
 
 
-    public ChartView(Double[][] data, String function1, String function2, int dropId, Method method) {
-        createChart(data, function1, function2, dropId, method);
-        window = new JFrame();
-        setSetting();
-        window.add(jPanel);
+    public Chart(Double[][] data, String function1, String function2, int dropId, Method method) {
+        createComponent(data, function1, function2, dropId, method);
     }
 
-    private void setSetting() {
-        window.setVisible(true);
-        window.setBounds(300, 300, 1100, 700);
-    }
-
-    private void createChart(Double[][] data, String function1, String function2, int dropId, Method method) {
+    private void createComponent(Double[][] data, String function1, String function2, int dropId, Method method) {
 
         jPanel = new JPanel();
         jPanel.setLayout(new GridBagLayout());
@@ -73,8 +64,12 @@ public class ChartView {
         descriptionPanel.add(coefficientField);
         descriptionPanel.add(button);
 
-        baseConstraints.gridx = 1;
+        baseConstraints.gridy = 1;
         jPanel.add(descriptionPanel, baseConstraints);
+    }
+
+    public JPanel getjPanel() {
+        return jPanel;
     }
 
     public JTextField getCoefficientField() {
@@ -93,7 +88,7 @@ public class ChartView {
         return button;
     }
 
-    public JPanel createPanel(String function1, String function2, Double [][] data, int dropId, Method method) {
+    private JPanel createPanel(String function1, String function2, Double [][] data, int dropId, Method method) {
         JFreeChart chart = createChart(createDataset(function1, function2, data, dropId, method));
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setMouseWheelEnabled(true);
@@ -110,7 +105,7 @@ public class ChartView {
         return chartPanel;
     }
 
-    public Triple<XYDataset, XYDataset, DefaultXYDataset> createDataset(String function1, String function2, Double [][] data, int dropId, Method method) {
+    private Triple<XYDataset, XYDataset, DefaultXYDataset> createDataset(String function1, String function2, Double [][] data, int dropId, Method method) {
 
         Expression formula1 = new ExpressionBuilder(function1).variable("x").build();
         Expression formula2 = new ExpressionBuilder(function2).variable("x").build();

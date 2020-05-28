@@ -3,20 +3,18 @@ package controllers;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import util.Method;
-import views.ChartView;
+import views.Chart;
 
 class ChartController {
 
-    private ChartView view;
+    private Chart view;
     private String function1;
     private String function2;
-    private Double[][] data;
 
-    ChartController(Double[][] data, String function1, String function2, int dropId, Method method){
-        this.function1=function1;
-        this.function2=function2;
-        this.data = data;
-        view = new ChartView(data,function1, function2, dropId, method);
+    ChartController(Chart view, String function1, String function2){
+        this.view = view;
+        this.function1 = function1;
+        this.function2 = function2;
         addActionListener();
     }
 
