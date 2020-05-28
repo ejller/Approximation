@@ -8,13 +8,13 @@ import static java.lang.Math.abs;
 
 public class ApproximationMethod {
 
-    public int findDropPointId(Double[][] points, String formula) {
+    public int findDropPointId(double[][] points, String formula) {
         Expression expression = new ExpressionBuilder(formula).variable("x").build();
         double maxDelta = 0.0;
         int idx = 1;
         for (int i = 0; i<points.length; i++) {
-            Double x = points[i][0];
-            Double y = points[i][1];
+            double x = points[i][0];
+            double y = points[i][1];
             if (abs(expression.setVariable("x", x).evaluate() - y) > maxDelta) {
                 maxDelta = abs(expression.setVariable("x", x).evaluate() - y);
                 idx = i;
@@ -23,9 +23,9 @@ public class ApproximationMethod {
         return idx;
     }
 
-    public String linear(Double[][] data){
-        Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (Double[] datum : data) {
+    public String linear(double[][] data){
+        double[] sum = {0.0, 0.0, 0.0, 0.0};
+        for (double[] datum : data) {
             sum[0] += datum[0]; //x
             sum[1] += datum[1]; //y
             sum[2] += datum[0] * datum[1]; //xy
@@ -45,30 +45,9 @@ public class ApproximationMethod {
     }
 
 
-//    public String linear(Double[][] data) {
-//        Double[] sum = {0.0, 0.0, 0.0, 0.0};
-//        for (Double[] datum : data) {
-//            sum[0] += datum[0]; //x
-//            sum[1] += datum[1]; //y
-//            sum[2] += datum[0] * datum[1]; //xy
-//            sum[3] += Math.pow(datum[0], 2.0); //x2
-//        }
-//        int n = data.length;
-//        double a = Precision.round((n*sum[2] - sum[0]*sum[1]) / (n*sum[3] - Math.pow(sum[0], 2)),5);
-//        double b =  Precision.round((sum[1] - a * sum[0]) / n, 5);
-//        String result = "";
-//        result += a + "*x";
-//        if (b > 0) {
-//            result += "+" + b;
-//        } else if (b != 0) {
-//            result += b;
-//        }
-//        return result;
-//    }
-
-    public String square(Double[][] data) {
+    public String square(double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        for (Double[] datum : data) {
+        for (double[] datum : data) {
             double x = datum[0];
             double y = datum[1];
             sum[0] += x; //x
@@ -79,7 +58,7 @@ public class ApproximationMethod {
             sum[5] += x * y; //xy
             sum[6] += Math.pow(x, 2.0) * y; //x2y
         }
-        Double[][] matrix = new Double[3][3];
+        double[][] matrix = new double[3][3];
         matrix[0][0] = sum[2];
         matrix[0][1] = sum[0];
         matrix[0][2] = data.length * 1.0;
@@ -89,12 +68,12 @@ public class ApproximationMethod {
         matrix[2][0] = sum[4];
         matrix[2][1] = sum[3];
         matrix[2][2] = sum[2];
-        Double d = determinant(matrix);
+        double d = determinant(matrix);
 
         matrix[0][0] = sum[1];
         matrix[1][0] = sum[5];
         matrix[2][0] = sum[6];
-        Double da = determinant(matrix);
+        double da = determinant(matrix);
 
         matrix[0][0] = sum[2];
         matrix[1][0] = sum[3];
@@ -102,7 +81,7 @@ public class ApproximationMethod {
         matrix[0][1] = sum[1];
         matrix[1][1] = sum[5];
         matrix[2][1] = sum[6];
-        Double db = determinant(matrix);
+        double db = determinant(matrix);
 
         matrix[0][1] = sum[0];
         matrix[1][1] = sum[2];
@@ -110,7 +89,7 @@ public class ApproximationMethod {
         matrix[0][2] = sum[1];
         matrix[1][2] = sum[5];
         matrix[2][2] = sum[6];
-        Double dc = determinant(matrix);
+        double dc = determinant(matrix);
 
         double a =  Precision.round(da / d,5);
         double b =  Precision.round(db / d,5);
@@ -130,9 +109,9 @@ public class ApproximationMethod {
         return result;
     }
 
-    public String power(Double[][] data) {
+    public String power(double[][] data) {
         Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (Double[] datum : data) {
+        for (double[] datum : data) {
             double x = datum[0];
             double y = datum[1];
             sum[0] += Math.log(x); //x
@@ -149,9 +128,9 @@ public class ApproximationMethod {
     }
 
 
-    public String hyperbola(Double[][] data) {
-        Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (Double[] datum : data) {
+    public String hyperbola(double[][] data) {
+        double[] sum = {0.0, 0.0, 0.0, 0.0};
+        for (double[] datum : data) {
             double x = datum[0];
             double y = datum[1];
             sum[0] += 1 / x; //x
@@ -174,9 +153,9 @@ public class ApproximationMethod {
     }
 
 
-    public String log(Double[][] data) {
-        Double[] sum = {0.0, 0.0, 0.0, 0.0};
-        for (Double[] datum : data) {
+    public String log(double[][] data) {
+        double[] sum = {0.0, 0.0, 0.0, 0.0};
+        for (double[] datum : data) {
             double x = datum[0];
             double y = datum[1];
             sum[0] += y * Math.log(x); //ylnx
@@ -196,10 +175,10 @@ public class ApproximationMethod {
          return result;
     }
 
-    public String exp(Double[][] data) {
-        Double[] sum = {0.0, 0.0, 0.0, 0.0};
+    public String exp(double[][] data) {
+        double[] sum = {0.0, 0.0, 0.0, 0.0};
 
-        for (Double[] datum : data) {
+        for (double[] datum : data) {
             double x = datum[0];
             double y = datum[1];
             sum[0] += x * Math.log(y); //xlny
@@ -220,7 +199,7 @@ public class ApproximationMethod {
     }
 
 
-    private double determinant(Double[][] a) {
+    private double determinant(double[][] a) {
         double sum = a[0][0]*(a[1][1]*a[2][2]-a[1][2]*a[2][1]);
         sum-= a[1][0]*(a[0][1]*a[2][2]-a[0][2]*a[2][1]);
         sum+= a[2][0]*(a[0][1]*a[1][2]-a[0][2]*a[1][1]);

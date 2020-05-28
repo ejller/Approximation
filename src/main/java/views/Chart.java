@@ -7,15 +7,13 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.*;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.function.Function2D;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
-import util.Method;
-import util.Pair;
-import util.Triple;
-
+import model.Method;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,18 +26,31 @@ public class Chart {
     private JTextField coefficientField;
     private JLabel coefficientFunction1Label;
     private JLabel coefficientFunction2Label;
+    private double[][] data;
+    private String function1;
+    private String function2;
+    private int dropId;
+    private Method method;
+    private XYDataset firstFunction;
+    private XYDataset secondFunction;
+    private DefaultXYDataset points;
 
 
-    public Chart(Double[][] data, String function1, String function2, int dropId, Method method) {
-        createComponent(data, function1, function2, dropId, method);
+    public Chart(double[][] data, String function1, String function2, int dropId, Method method) {
+        this.data=data;
+        this.function1=function1;
+        this.function2=function2;
+        this.dropId=dropId;
+        this.method=method;
+        createComponent();
     }
 
-    private void createComponent(Double[][] data, String function1, String function2, int dropId, Method method) {
+    private void createComponent() {
 
         jPanel = new JPanel();
         jPanel.setLayout(new GridBagLayout());
         GridBagConstraints baseConstraints = new GridBagConstraints();
-        JPanel panel = createPanel(function1, function2, data, dropId, method);
+        JPanel panel = createChartPanel();
         jPanel.add(panel);
 
 
@@ -68,7 +79,126 @@ public class Chart {
         jPanel.add(descriptionPanel, baseConstraints);
     }
 
-    public JPanel getjPanel() {
+    private JPanel createChartPanel() {
+        setDataset();
+        JFreeChart chart = createChart();
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+            }
+        });
+        chartPanel.setVerticalAxisTrace(true);
+        chartPanel.setHorizontalAxisTrace(true);
+        chartPanel.setMouseZoomable(true);
+
+        return chartPanel;
+    }
+
+    private void setDataset() {
+
+        Expression formula1 = new ExpressionBuilder(function1).variable("x").build();
+        Expression formula2 = new ExpressionBuilder(function2).variable("x").build();
+        double[][] borders = getLeftAndRightBorders();
+        double leftBorder, rightBorder;
+        if (method == Method.LINEAR || method == Method.SQUARE || method == Method.LOG) {
+            leftBorder = borders[0][1] - 150;
+            rightBorder = borders[0][0] + 150;
+        } else {
+            leftBorder = borders[0][1] - 15;
+            rightBorder = borders[0][0] + 15;
+        }
+        firstFunction = DatasetUtilities.sampleFunction2D(
+                new Function(formula1),
+                leftBorder,
+                rightBorder,
+                300,
+                function1
+        );
+        secondFunction = DatasetUtilities.sampleFunction2D(
+                new Function(formula2),
+                leftBorder,
+                rightBorder,
+                300,
+                function2
+        );
+
+        points = new DefaultXYDataset();
+        double[] yIn = new double[data.length - 1];
+        double[] xIn = new double[data.length - 1];
+        double[] yEx = new double[1];
+        double[] xEx = new double[1];
+        int inc = 0;
+        for (int i = 0; i<data.length; i++) {
+            if (i!=dropId) {
+                xIn[inc] = data[i][0];
+                yIn[inc] = data[i][1];
+                inc++;
+            } else {
+                xEx[0] = data[i][0];
+                yEx[0] = data[i][1];
+            }
+        }
+
+        points.addSeries("Включенные", new double[][]{xIn, yIn});
+        points.addSeries("Исключенная", new double[][]{xEx, yEx});
+    }
+
+
+    private JFreeChart createChart() {
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Графики",
+                "X",
+                "Y",
+                 points,
+                 PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setRenderer(0, new XYLineAndShapeRenderer());
+        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer(0);
+        r.setSeriesLinesVisible(0, false);
+
+        plot.setDataset(1, firstFunction);
+        plot.setRenderer(1, new StandardXYItemRenderer());
+        plot.setDataset(2, secondFunction);
+        plot.setRenderer(2, new StandardXYItemRenderer());
+
+        plot.getDomainAxis().setLowerMargin(0.0);
+        plot.getDomainAxis().setUpperMargin(0.0);
+        return chart;
+    }
+
+    private double[][] getLeftAndRightBorders() {
+        double max = (double)-Integer.MAX_VALUE;
+        double min = (double)Integer.MAX_VALUE;
+        for (double[] i : data) {
+                if (i[0]>max) max = i[0];
+                if (i[0]<min) min = i[0];
+        }
+        return new double[][]{{max, min}};
+    }
+
+
+    static class Function implements Function2D {
+        Expression ex;
+
+        Function(Expression ex) {
+            this.ex = ex;
+        }
+
+        public double getValue(double x) {
+            return ex.setVariable("x", x).evaluate();
+        }
+    }
+
+    public JPanel getJPanel() {
         return jPanel;
     }
 
@@ -86,132 +216,6 @@ public class Chart {
 
     public JButton getButton() {
         return button;
-    }
-
-    private JPanel createPanel(String function1, String function2, Double [][] data, int dropId, Method method) {
-        JFreeChart chart = createChart(createDataset(function1, function2, data, dropId, method));
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setMouseWheelEnabled(true);
-        chartPanel.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-            }
-        });
-        chartPanel.setVerticalAxisTrace(true);
-        chartPanel.setHorizontalAxisTrace(true);
-        chartPanel.setMouseZoomable(true);
-
-        return chartPanel;
-    }
-
-    private Triple<XYDataset, XYDataset, DefaultXYDataset> createDataset(String function1, String function2, Double [][] data, int dropId, Method method) {
-
-        Expression formula1 = new ExpressionBuilder(function1).variable("x").build();
-        Expression formula2 = new ExpressionBuilder(function2).variable("x").build();
-        Pair<Double, Double> borders = getLeftAndRightBorders(data);
-        Double leftBorder, rightBorder;
-        if (method == Method.LINEAR || method == Method.SQUARE || method == Method.LOG) {
-            leftBorder = borders.snd - 150;
-            rightBorder = borders.fst + 150;
-        } else {
-            leftBorder = borders.snd - 15;
-            rightBorder = borders.fst + 15;
-        }
-        XYDataset first = DatasetUtilities.sampleFunction2D(
-                new Function(formula1),
-                leftBorder,
-                rightBorder,
-                300,
-                function1
-        );
-        XYDataset second = DatasetUtilities.sampleFunction2D(
-                new Function(formula2),
-                leftBorder,
-                rightBorder,
-                300,
-                function2
-        );
-
-        DefaultXYDataset points = new DefaultXYDataset();
-        double y_in[] = new double[data.length-1];
-        double x_in[] = new double[data.length-1];
-        double y_ex[] = new double[1];
-        double x_ex[] = new double[1];
-        int inc = 0;
-        for (int i = 0; i<data.length; i++) {
-            if (i!=dropId) {
-                x_in[inc] = data[i][0];
-                y_in[inc] = data[i][1];
-                inc++;
-            } else {
-                x_ex[0] = data[i][0];
-                y_ex[0] = data[i][1];
-            }
-        }
-
-        double included[][] = { x_in , y_in };
-        double excluded[][] = { x_ex , y_ex };
-
-        points.addSeries("Включенные", included);
-        points.addSeries("Исключенная", excluded);
-        return Triple.of(first, second, points);
-    }
-
-
-    private JFreeChart createChart(Triple<XYDataset, XYDataset, DefaultXYDataset> dataset) {
-
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Графики",
-                "X",
-                "Y",
-                 dataset.thrd,
-                 PlotOrientation.VERTICAL,
-                true,
-                true,
-                false
-        );
-
-
-        XYPlot plot = (XYPlot) chart.getPlot();
-
-        plot.setRenderer(0, new XYLineAndShapeRenderer());
-        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer(0);
-        r.setSeriesLinesVisible(0, false);
-
-        plot.setDataset(1, dataset.fst);
-        plot.setRenderer(1, new StandardXYItemRenderer());
-        plot.setDataset(2, dataset.snd);
-        plot.setRenderer(2, new StandardXYItemRenderer());
-
-
-
-        plot.getDomainAxis().setLowerMargin(0.0);
-        plot.getDomainAxis().setUpperMargin(0.0);
-        return chart;
-    }
-
-    private Pair<Double,Double> getLeftAndRightBorders(Double data[] []) {
-        Double max = -Integer.MAX_VALUE + 0.0;
-        Double min = Integer.MAX_VALUE + 0.0;
-        for (Double[] i : data) {
-                if (i[0]>max) max = i[0];
-                if (i[0]<min) min = i[0];
-        }
-        return Pair.of(max,min);
-    }
-
-
-    static class Function implements Function2D {
-        Expression ex;
-
-        public Function(Expression ex) {
-            this.ex = ex;
-        }
-
-        public double getValue(double x) {
-            return ex.setVariable("x", x).evaluate();
-        }
     }
 
 

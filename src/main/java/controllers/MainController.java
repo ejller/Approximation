@@ -1,7 +1,7 @@
 package controllers;
 
 import model.ApproximationMethod;
-import util.Method;
+import model.Method;
 import views.Chart;
 import views.MainView;
 
@@ -35,23 +35,23 @@ public class MainController {
         });
 
         view.getButtonChart().addActionListener(li -> {
-            Double[][] data = dataProcessing();
+            double[][] data = dataProcessing();
             String function1 = getFunction(data);
             String function2 = getFunction(dropPoint(data,function1));
             if (chart!=null){
-                view.getPanelChart().remove(chart.getjPanel());
+                view.getPanelChart().remove(chart.getJPanel());
             }
             chart = new Chart(data, function1, function2,dropId,method);
             new ChartController(chart, function1,function2);
-            view.getPanelChart().add(chart.getjPanel());
+            view.getPanelChart().add(chart.getJPanel());
             view.getPanelChart().revalidate();
             view.getPanelChart().repaint();
 
         });
     }
 
-    private Double[][] dataProcessing(){
-        Double[][] data = new Double[sizeTable][sizeTable];
+    private double[][] dataProcessing(){
+        double[][] data = new double[sizeTable][sizeTable];
         for (int i=0; i<sizeTable; i++){
             data[i][0] = Double.valueOf(view.getValueTable().getModel().getValueAt(i,0)+"");
             data[i][1] = Double.valueOf(view.getValueTable().getModel().getValueAt(i,1)+"");
@@ -59,7 +59,7 @@ public class MainController {
         return data;
     }
 
-    private String getFunction(Double[][] data){
+    private String getFunction(double[][] data){
         approximationMethod = new ApproximationMethod();
         String function ="";
         if (view.getLinearApproximation().isSelected()) {
@@ -84,9 +84,9 @@ public class MainController {
         return function;
     }
 
-    private Double[][] dropPoint(Double[][] data, String function){
+    private double[][] dropPoint(double[][] data, String function){
         dropId = approximationMethod.findDropPointId(data, function);
-        Double [][] copyData = new Double[data.length-1][2];
+        double [][] copyData = new double[data.length-1][2];
         int offset = 0;
         for (int i=0; i<data.length; i++) {
             if (i == dropId) {

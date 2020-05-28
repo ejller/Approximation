@@ -2,7 +2,6 @@ package controllers;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import util.Method;
 import views.Chart;
 
 class ChartController {
@@ -20,7 +19,7 @@ class ChartController {
 
     private void addActionListener() {
         view.getButton().addActionListener(li -> {
-            Double x;
+            double x;
             try {
                 x = Double.parseDouble(view.getCoefficientField().getText());
             } catch (NumberFormatException e) {
@@ -28,14 +27,14 @@ class ChartController {
                 return;
             }
             try {
-                Double value = getCoefficient(x, function1);
+                double value = getCoefficient(x, function1);
                 view.getCoefficientFunction1Label().setText("Значение до апроксимации: "+value);
             } catch (ArithmeticException e) {
                 view.getCoefficientFunction1Label().setText("Недопустимое значение x");
             }
 
             try {
-                Double value = getCoefficient(x, function2);
+                double value = getCoefficient(x, function2);
                 view.getCoefficientFunction2Label().setText("Значение после апроксимации: "+value);
             } catch (ArithmeticException e) {
                 view.getCoefficientFunction2Label().setText("Недопустимое значение x");
@@ -44,7 +43,7 @@ class ChartController {
         });
     }
 
-    private Double getCoefficient(double x, String function) throws ArithmeticException{
+    private double getCoefficient(double x, String function) throws ArithmeticException{
             Expression e = new ExpressionBuilder(function)
                     .variables("x")
                     .build()

@@ -132,7 +132,13 @@ public class MainView {
         panelWrapperTable.add(valueTable, BorderLayout.CENTER);
 
         JScrollPane scroller = new JScrollPane(panelWrapperTable);
-        scroller.setPreferredSize(new Dimension(300,150));
+        int height = 45;
+        if(size<15){
+            height+=size*15;
+        } else {
+            height+=15*15;
+        }
+        scroller.setPreferredSize(new Dimension(300,height));
         scroller.setBorder(null);
 
         return scroller;
