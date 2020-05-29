@@ -13,7 +13,7 @@ import org.jfree.data.function.Function2D;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
-import model.Method;
+import model.Type;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,19 +30,19 @@ public class Chart {
     private String function1;
     private String function2;
     private int dropId;
-    private Method method;
+    private Type type;
 
     private XYDataset firstFunction;
     private XYDataset secondFunction;
     private DefaultXYDataset points;
 
 
-    public Chart(double[][] data, String function1, String function2, int dropId, Method method) {
+    public Chart(double[][] data, String function1, String function2, int dropId, Type type) {
         this.data=data;
         this.function1=function1;
         this.function2=function2;
         this.dropId=dropId;
-        this.method=method;
+        this.type = type;
         setDatasets();
         initUi();
 
@@ -106,18 +106,18 @@ public class Chart {
         double[][] borders = getLeftAndRightBorders();
         double leftBorder = borders[0][1];
         double rightBorder = borders [0][0];
-        if (method==Method.LOG && (leftBorder - method.getBias() <= 0)) leftBorder = 0.01 + method.getBias();
+        if (type == Type.LOG && (leftBorder - type.getBias() <= 0)) leftBorder = 0.01 + type.getBias();
         firstFunction = DatasetUtilities.sampleFunction2D(
-                new Function(formula1, method),
-                leftBorder - method.getBias(),
-                rightBorder + method.getBias(),
+                new Function(formula1, type),
+                leftBorder - type.getBias(),
+                rightBorder + type.getBias(),
                 300,
                 function1
         );
         secondFunction = DatasetUtilities.sampleFunction2D(
-                new Function(formula2, method),
-                leftBorder - method.getBias(),
-                rightBorder + method.getBias(),
+                new Function(formula2, type),
+                leftBorder - type.getBias(),
+                rightBorder + type.getBias(),
                 300,
                 function2
         );
@@ -159,8 +159,8 @@ public class Chart {
 
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setRenderer(0, new XYLineAndShapeRenderer());
-        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer(0);
-        r.setSeriesLinesVisible(0, false);
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer(0);
+        renderer.setSeriesLinesVisible(0, false);
 
         plot.setDataset(1, firstFunction);
         plot.setRenderer(1, new StandardXYItemRenderer());
@@ -185,15 +185,15 @@ public class Chart {
 
     static class Function implements Function2D {
         Expression ex;
-        Method method;
+        Type type;
 
-        Function(Expression ex, Method method) {
+        Function(Expression ex, Type type) {
             this.ex = ex;
-            this.method = method;
+            this.type = type;
         }
 
         public double getValue(double x) {
-            if (method == Method.HYPERBOLA && x==0) x+=0.1E-1;
+            if (type == Type.HYPERBOLA && x==0) x+=0.1E-1;
             return ex.setVariable("x", x).evaluate();
         }
     }

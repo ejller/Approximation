@@ -1,19 +1,17 @@
 package controllers;
 
 import model.ApproximationMethod;
-import model.Method;
+import model.Type;
 import views.Chart;
 import views.MainView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.stream.DoubleStream;
 
 public class MainController {
     private MainView view;
     private int sizeTable;
-    private Method method;
+    private Type type;
     private int dropId;
     private ApproximationMethod approximationMethod;
     private Chart chart;
@@ -44,17 +42,17 @@ public class MainController {
                 function1 = getFunction(data);
                 function2 = getFunction(dropPoint(data, function1));
             } catch (IllegalArgumentException e) {
-                view.getErrorInputLabel().setText(e.getMessage());
+                view.getErrorLabel().setText(e.getMessage());
                 return;
             } catch (ArithmeticException e) {
-                view.getErrorInputLabel().setText("Введите корректные значения в таблицу");
+                view.getErrorLabel().setText("Введите корректные значения в таблицу");
                 return;
             }
             if (chart != null) {
                 view.getPanelChart().remove(chart.getJPanel());
             }
-            view.getErrorInputLabel().setText("");
-            chart = new Chart(data, function1, function2, dropId, method);
+            view.getErrorLabel().setText("");
+            chart = new Chart(data, function1, function2, dropId, type);
             new ChartController(chart, function1, function2);
             view.getPanelChart().add(chart.getJPanel());
             view.getPanelChart().revalidate();
@@ -80,14 +78,14 @@ public class MainController {
         switch (view.getButtonGroup().getSelection().getActionCommand()) {
             case "LINEAR": {
                 function = approximationMethod.linear(data);
-                method = Method.LINEAR;
+                type = Type.LINEAR;
                 break;
             }
             case "HYPERBOLA": {
                 if (isPointsContainsIllegalValue(data, true, 0))
                     throw new IllegalArgumentException("x Не должен быть равен 0");
                 function = approximationMethod.hyperbola(data);
-                method = Method.HYPERBOLA;
+                type = Type.HYPERBOLA;
                 break;
             }
             case "POWER": {
@@ -96,26 +94,26 @@ public class MainController {
                 if (isPointsContainsIllegalValue(data, false, 1))
                     throw new IllegalArgumentException("y Должнен быть больше 0");
                 function = approximationMethod.power(data);
-                method = Method.POWER;
+                type = Type.POWER;
                 break;
             }
             case "SQUARE": {
                 function = approximationMethod.square(data);
-                method = Method.SQUARE;
+                type = Type.SQUARE;
                 break;
             }
             case "EXP": {
                 if (isPointsContainsIllegalValue(data, false, 1))
                     throw new IllegalArgumentException("y Должен быть больше 0");
                 function = approximationMethod.exp(data);
-                method = Method.EXP;
+                type = Type.EXP;
                 break;
             }
             case "LOG": {
                 if (isPointsContainsIllegalValue(data, false, 0))
                     throw new IllegalArgumentException("x Должен быть больше 0");
                 function = approximationMethod.log(data);
-                method = Method.LOG;
+                type = Type.LOG;
                 break;
             }
             default:

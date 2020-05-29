@@ -1,6 +1,6 @@
 package model;
 
-public enum Method {
+public enum Type {
     LINEAR (25),
     HYPERBOLA (5),
     POWER (2),
@@ -10,7 +10,7 @@ public enum Method {
 
     private int bias;
 
-    Method(int bias) {
+    Type(int bias) {
         this.bias = bias;
     }
 

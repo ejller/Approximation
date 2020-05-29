@@ -1,12 +1,12 @@
 package views;
-import model.Method;
+import model.Type;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
 public class MainView {
-    private JLabel errorInputLabel;
+    private JLabel errorLabel;
     private JFrame window;
     private JPanel view;
     private JPanel panelChart;
@@ -60,10 +60,10 @@ public class MainView {
         inputPanel.add(countField);
         inputPanel.add(buttonSize);
 
-        errorInputLabel = new JLabel("");
-        errorInputLabel.setForeground(Color.red);
+        errorLabel = new JLabel("");
+        errorLabel.setForeground(Color.red);
         baseConstraints.gridy = 3;
-        panelTableAndInput.add(errorInputLabel, baseConstraints);
+        panelTableAndInput.add(errorLabel, baseConstraints);
         baseConstraints.gridy = 0;
         panelTableAndInput.add(descriptionLabel,baseConstraints);
         baseConstraints.gridy = 1;
@@ -71,17 +71,17 @@ public class MainView {
 
         buttonGroup = new ButtonGroup();
         JRadioButton linearApproximation = new JRadioButton("Линейная аппроксимация");
-        linearApproximation.setActionCommand(Method.LINEAR.toString());
+        linearApproximation.setActionCommand(Type.LINEAR.toString());
         JRadioButton squareApproximation = new JRadioButton("Квадратичная аппроксимация");
-        squareApproximation.setActionCommand(Method.SQUARE.toString());
+        squareApproximation.setActionCommand(Type.SQUARE.toString());
         JRadioButton powerApproximation = new JRadioButton("Степенная аппроксимация");
-        powerApproximation.setActionCommand(Method.POWER.toString());
+        powerApproximation.setActionCommand(Type.POWER.toString());
         JRadioButton hyperbolaApproximation = new JRadioButton("Гиперболическая аппроксимация");
-        hyperbolaApproximation.setActionCommand(Method.HYPERBOLA.toString());
+        hyperbolaApproximation.setActionCommand(Type.HYPERBOLA.toString());
         JRadioButton logApproximation = new JRadioButton("Логарифмическая аппроксимация");
-        logApproximation.setActionCommand(Method.LOG.toString());
+        logApproximation.setActionCommand(Type.LOG.toString());
         JRadioButton expApproximation = new JRadioButton("Экспонециальная аппроксимация");
-        expApproximation.setActionCommand(Method.EXP.toString());
+        expApproximation.setActionCommand(Type.EXP.toString());
 
         panelWrapperTable = initTable(0);
         baseConstraints.gridy = 2;
@@ -154,8 +154,8 @@ public class MainView {
         return scroller;
     }
 
-    public JLabel getErrorInputLabel() {
-        return errorInputLabel;
+    public JLabel getErrorLabel() {
+        return errorLabel;
     }
 
     public JPanel getPanelChart() {
