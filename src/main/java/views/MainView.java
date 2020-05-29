@@ -1,9 +1,12 @@
 package views;
+import model.Method;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
 public class MainView {
+    private JLabel errorInputLabel;
     private JFrame window;
     private JPanel view;
     private JPanel panelChart;
@@ -14,13 +17,7 @@ public class MainView {
     private JTextField countField;
     private JButton buttonSize;
     private JButton buttonChart;
-
-    private JRadioButton linearApproximation;
-    private JRadioButton squareApproximation;
-    private JRadioButton powerApproximation;
-    private JRadioButton hyperbolaApproximation;
-    private JRadioButton expApproximation;
-    private JRadioButton logApproximation;
+    private ButtonGroup buttonGroup;
     private JTable valueTable;
 
 
@@ -66,13 +63,19 @@ public class MainView {
         baseConstraints.gridy = 1;
         panelTableAndInput.add(inputPanel, baseConstraints);
 
-        ButtonGroup buttonGroup = new ButtonGroup();
-        linearApproximation = new JRadioButton("Линейная аппроксимация");
-        squareApproximation = new JRadioButton("Квадратичная аппроксимация");
-        powerApproximation = new JRadioButton("Степенная аппроксимация");
-        hyperbolaApproximation = new JRadioButton("Гиперболическая аппроксимация");
-        logApproximation = new JRadioButton("Логарифмическая аппроксимация");
-        expApproximation = new JRadioButton("Экспонециальная аппроксимация");
+        buttonGroup = new ButtonGroup();
+        JRadioButton linearApproximation = new JRadioButton("Линейная аппроксимация");
+        linearApproximation.setActionCommand(Method.LINEAR.toString());
+        JRadioButton squareApproximation = new JRadioButton("Квадратичная аппроксимация");
+        squareApproximation.setActionCommand(Method.SQUARE.toString());
+        JRadioButton powerApproximation = new JRadioButton("Степенная аппроксимация");
+        powerApproximation.setActionCommand(Method.POWER.toString());
+        JRadioButton hyperbolaApproximation = new JRadioButton("Гиперболическая аппроксимация");
+        hyperbolaApproximation.setActionCommand(Method.HYPERBOLA.toString());
+        JRadioButton logApproximation = new JRadioButton("Логарифмическая аппроксимация");
+        logApproximation.setActionCommand(Method.LOG.toString());
+        JRadioButton expApproximation = new JRadioButton("Экспонециальная аппроксимация");
+        expApproximation.setActionCommand(Method.EXP.toString());
 
         panelWrapperTable = initTable(0);
         baseConstraints.gridy = 2;
@@ -105,7 +108,9 @@ public class MainView {
         view.add(panelTableAndInput);
         GridBagConstraints panelChartConst = new GridBagConstraints();
         panelChartConst.gridx=1;
+        errorInputLabel = new JLabel("");
         view.add(panelChart, panelChartConst);
+        view.add(errorInputLabel);
 
     }
 
@@ -144,6 +149,9 @@ public class MainView {
         return scroller;
     }
 
+    public JLabel getErrorInputLabel() {
+        return errorInputLabel;
+    }
 
     public JPanel getPanelChart() {
         return panelChart;
@@ -153,6 +161,7 @@ public class MainView {
         return valueTable;
     }
 
+    public ButtonGroup getButtonGroup() {return buttonGroup;}
 
     public void setPanelWrapperTable(JScrollPane panelWrapperTable) {
         this.panelWrapperTable = panelWrapperTable;
@@ -178,29 +187,4 @@ public class MainView {
         return countField;
     }
 
-
-    public JRadioButton getLinearApproximation() {
-        return linearApproximation;
-    }
-
-    public JRadioButton getPowerApproximation() {
-        return powerApproximation;
-    }
-
-    public JRadioButton getSquareApproximation() {
-        return squareApproximation;
-    }
-
-    public JRadioButton getHyperbolaApproximation() {
-        return hyperbolaApproximation;
-    }
-
-    public JRadioButton getExpApproximation() {
-        return expApproximation;
-    }
-
-
-    public JRadioButton getLogApproximation() {
-        return logApproximation;
-    }
 }

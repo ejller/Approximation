@@ -31,6 +31,7 @@ public class Chart {
     private String function2;
     private int dropId;
     private Method method;
+
     private XYDataset firstFunction;
     private XYDataset secondFunction;
     private DefaultXYDataset points;
@@ -42,10 +43,12 @@ public class Chart {
         this.function2=function2;
         this.dropId=dropId;
         this.method=method;
-        createComponent();
+        setDatasets();
+        initUi();
+
     }
 
-    private void createComponent() {
+    private void initUi() {
 
         jPanel = new JPanel();
         jPanel.setLayout(new GridBagLayout());
@@ -80,7 +83,6 @@ public class Chart {
     }
 
     private JPanel createChartPanel() {
-        setDataset();
         JFreeChart chart = createChart();
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setMouseWheelEnabled(true);
@@ -97,30 +99,24 @@ public class Chart {
         return chartPanel;
     }
 
-    private void setDataset() {
+    private void setDatasets() {
 
         Expression formula1 = new ExpressionBuilder(function1).variable("x").build();
         Expression formula2 = new ExpressionBuilder(function2).variable("x").build();
         double[][] borders = getLeftAndRightBorders();
-        double leftBorder, rightBorder;
-        if (method == Method.LINEAR || method == Method.SQUARE || method == Method.LOG) {
-            leftBorder = borders[0][1] - 150;
-            rightBorder = borders[0][0] + 150;
-        } else {
-            leftBorder = borders[0][1] - 15;
-            rightBorder = borders[0][0] + 15;
-        }
+        double leftBorder = borders[0][1];
+        double rightBorder = borders [0][0];
         firstFunction = DatasetUtilities.sampleFunction2D(
-                new Function(formula1),
-                leftBorder,
-                rightBorder,
+                new Function(formula1, method),
+                leftBorder - method.getBias(),
+                rightBorder + method.getBias(),
                 300,
                 function1
         );
         secondFunction = DatasetUtilities.sampleFunction2D(
-                new Function(formula2),
-                leftBorder,
-                rightBorder,
+                new Function(formula2, method),
+                leftBorder - method.getBias(),
+                rightBorder + method.getBias(),
                 300,
                 function2
         );
@@ -188,12 +184,15 @@ public class Chart {
 
     static class Function implements Function2D {
         Expression ex;
+        Method method;
 
-        Function(Expression ex) {
+        Function(Expression ex, Method method) {
             this.ex = ex;
+            this.method = method;
         }
 
         public double getValue(double x) {
+            if (method == Method.HYPERBOLA && x==0) x+=0.1E-1;
             return ex.setVariable("x", x).evaluate();
         }
     }
