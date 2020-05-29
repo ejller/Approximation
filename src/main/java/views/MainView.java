@@ -59,7 +59,12 @@ public class MainView {
         JPanel inputPanel = new JPanel();
         inputPanel.add(countField);
         inputPanel.add(buttonSize);
-        panelTableAndInput.add(descriptionLabel);
+
+        errorInputLabel = new JLabel("");
+        baseConstraints.gridy = 3;
+        panelTableAndInput.add(errorInputLabel, baseConstraints);
+        baseConstraints.gridy = 0;
+        panelTableAndInput.add(descriptionLabel,baseConstraints);
         baseConstraints.gridy = 1;
         panelTableAndInput.add(inputPanel, baseConstraints);
 
@@ -97,20 +102,22 @@ public class MainView {
         functionTypePanel.add(expApproximation);
         functionTypePanel.add(logApproximation);
         linearApproximation.setSelected(true);
-        baseConstraints.gridy = 3;
+        baseConstraints.gridy = 4;
         panelTableAndInput.add(functionTypePanel, baseConstraints);
         buttonChart = new JButton("Построить график");
-        baseConstraints.gridy = 4;
+        baseConstraints.gridy = 5;
         panelTableAndInput.add(buttonChart, baseConstraints);
+
         panelChart = new JPanel();
         panelChart.setLayout(new GridBagLayout());
         panelChart.setBorder(BorderFactory.createEmptyBorder(60, 100, 60, 60));
-        view.add(panelTableAndInput);
-        GridBagConstraints panelChartConst = new GridBagConstraints();
-        panelChartConst.gridx=1;
-        errorInputLabel = new JLabel("");
-        view.add(panelChart, panelChartConst);
-        view.add(errorInputLabel);
+
+
+        GridBagConstraints viewConst = new GridBagConstraints();
+        view.add(panelTableAndInput,viewConst);
+        viewConst.gridx=1;
+        view.add(panelChart, viewConst);
+
 
     }
 
@@ -129,6 +136,7 @@ public class MainView {
 
         valueTable = new JTable(dataTable, columnNames);
         valueTable.setCellSelectionEnabled(true);
+        valueTable.getTableHeader().setOpaque(false);
         JPanel panelWrapperTable = new JPanel();
         panelWrapperTable.setLayout(new BorderLayout());
         panelWrapperTable.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -144,6 +152,7 @@ public class MainView {
             height+=15*15;
         }
         scroller.setPreferredSize(new Dimension(300,height));
+
         scroller.setBorder(null);
 
         return scroller;

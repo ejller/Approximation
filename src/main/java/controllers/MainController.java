@@ -53,6 +53,7 @@ public class MainController {
             if (chart != null) {
                 view.getPanelChart().remove(chart.getJPanel());
             }
+            view.getErrorInputLabel().setText("");
             chart = new Chart(data, function1, function2, dropId, method);
             new ChartController(chart, function1, function2);
             view.getPanelChart().add(chart.getJPanel());
