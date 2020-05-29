@@ -103,10 +103,10 @@ public class MainView {
         functionTypePanel.add(expApproximation);
         functionTypePanel.add(logApproximation);
         linearApproximation.setSelected(true);
-        baseConstraints.gridy = 3;
+        baseConstraints.gridy = 4;
         panelTableAndInput.add(functionTypePanel, baseConstraints);
         buttonChart = new JButton("Построить график");
-        baseConstraints.gridy = 4;
+        baseConstraints.gridy = 5;
         panelTableAndInput.add(buttonChart, baseConstraints);
         panelChart = new JPanel();
         panelChart.setLayout(new GridBagLayout());
@@ -114,9 +114,7 @@ public class MainView {
         view.add(panelTableAndInput);
         GridBagConstraints panelChartConst = new GridBagConstraints();
         panelChartConst.gridx=1;
-        errorInputLabel = new JLabel("");
         view.add(panelChart, panelChartConst);
-        view.add(errorInputLabel);
 
     }
 
@@ -135,6 +133,7 @@ public class MainView {
 
         valueTable = new JTable(dataTable, columnNames);
         valueTable.setCellSelectionEnabled(true);
+        valueTable.getTableHeader().setOpaque(false);
         JPanel panelWrapperTable = new JPanel();
         panelWrapperTable.setLayout(new BorderLayout());
         panelWrapperTable.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
