@@ -106,6 +106,7 @@ public class Chart {
         double[][] borders = getLeftAndRightBorders();
         double leftBorder = borders[0][1];
         double rightBorder = borders [0][0];
+        if (method==Method.LOG && (leftBorder - method.getBias() <= 0)) leftBorder = 0.01 + method.getBias();
         firstFunction = DatasetUtilities.sampleFunction2D(
                 new Function(formula1, method),
                 leftBorder - method.getBias(),
