@@ -12,7 +12,7 @@ public class ApproximationMethod {
         Expression expression = new ExpressionBuilder(formula).variable("x").build();
         double maxDelta = 0.0;
         int idx = 1;
-        for (int i = 0; i<points.length; i++) {
+        for (int i = 0; i < points.length; i++) {
             double x = points[i][0];
             double y = points[i][1];
             if (abs(expression.setVariable("x", x).evaluate() - y) > maxDelta) {
@@ -23,7 +23,7 @@ public class ApproximationMethod {
         return idx;
     }
 
-    public String linear(double[][] data){
+    public String linear(double[][] data) {
         double[] sum = {0.0, 0.0, 0.0, 0.0};
         for (double[] datum : data) {
             sum[0] += datum[0]; //x
@@ -32,14 +32,14 @@ public class ApproximationMethod {
             sum[3] += Math.pow(datum[0], 2.0); //x2
         }
         double del = Math.pow(sum[0], 2.0) - data.length * sum[3];
-        double a =  Precision.round((sum[0] * sum[1] - data.length * sum[2]) / del, 5);
-        double b =  Precision.round((sum[0] * sum[2] - sum[3] * sum[1]) / del, 5);
+        double a = Precision.round((sum[0] * sum[1] - data.length * sum[2]) / del, 5);
+        double b = Precision.round((sum[0] * sum[2] - sum[3] * sum[1]) / del, 5);
         String result = "";
-        result+=a+"*x";
+        result += a + "*x";
         if (b > 0) {
-            result+= "+"+b;
-        } else if (b != 0){
-            result+=b;
+            result += "+" + b;
+        } else if (b != 0) {
+            result += b;
         }
         return result;
     }
@@ -91,19 +91,19 @@ public class ApproximationMethod {
         matrix[2][2] = sum[6];
         double dc = determinant(matrix);
 
-        double a =  Precision.round(da / d,5);
-        double b =  Precision.round(db / d,5);
-        double c =  Precision.round(dc / d,5);
-        String result ="";
-        result =a+"*x^2";
+        double a = Precision.round(da / d, 5);
+        double b = Precision.round(db / d, 5);
+        double c = Precision.round(dc / d, 5);
+        String result;
+        result = a + "*x^2";
         if (b > 0) {
-            result += "+"+b+"*x";
-        } else if(b!=0){
-            result += b+"*x";
+            result += "+" + b + "*x";
+        } else if (b != 0) {
+            result += b + "*x";
         }
         if (c > 0) {
-            result += "+"+c;
-        } else if (c!=0){
+            result += "+" + c;
+        } else if (c != 0) {
             result += c;
         }
         return result;
@@ -120,10 +120,10 @@ public class ApproximationMethod {
             sum[3] += Math.log(x) * Math.log(y); //xy
         }
 
-        double b =  Precision.round((data.length * sum[3] - sum[0] * sum[1]) / (data.length * sum[2] - Math.pow(sum[0],2)), 10);
-        double a =  Precision.round(Math.exp(1.0 / data.length * sum[1] - b / data.length * sum[0]), 10);
-        if (a!=0)
-        return a+ "* x ^ "+b;
+        double b = Precision.round((data.length * sum[3] - sum[0] * sum[1]) / (data.length * sum[2] - Math.pow(sum[0], 2)), 10);
+        double a = Precision.round(Math.exp(1.0 / data.length * sum[1] - b / data.length * sum[0]), 10);
+        if (a != 0)
+            return a + "* x ^ " + b;
         return "0";
     }
 
@@ -139,15 +139,15 @@ public class ApproximationMethod {
             sum[3] += y; //y
         }
 
-        double b =  Precision.round((data.length * sum[2] - sum[0] * sum[3]) / (data.length * sum[1] - Math.pow(sum[0], 2)), 5);
-        double a =  Precision.round(1.0 / data.length * sum[3] - b / data.length * sum[0], 5);
+        double b = Precision.round((data.length * sum[2] - sum[0] * sum[3]) / (data.length * sum[1] - Math.pow(sum[0], 2)), 5);
+        double a = Precision.round(1.0 / data.length * sum[3] - b / data.length * sum[0], 5);
         String result = "";
-        result+=a;
+        result += a;
 
         if (b > 0) {
-            result+= "+" + b + "/x";
-        } else if (b!=0){
-            result+= b + "/x";
+            result += "+" + b + "/x";
+        } else if (b != 0) {
+            result += b + "/x";
         }
         return result;
     }
@@ -161,18 +161,18 @@ public class ApproximationMethod {
             sum[0] += y * Math.log(x); //ylnx
             sum[1] += Math.log(x); //lnx
             sum[2] += y; //y
-            sum[3] += Math.pow(Math.log(x),2); //ln2x
+            sum[3] += Math.pow(Math.log(x), 2); //ln2x
         }
 
-        double b =  Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1],2)),5);
-        double a =  Precision.round(1.0/data.length * sum[2] - b/data.length * sum[1],5);
-        String result =a+"";
+        double b = Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1], 2)), 5);
+        double a = Precision.round(1.0 / data.length * sum[2] - b / data.length * sum[1], 5);
+        String result = a + "";
         if (b >= 0) {
-            result+="+"+b +"*log(x)";
-        } else if (b!=0) {
-            result+=b+"*log(x)";
+            result += "+" + b + "*log(x)";
+        } else if (b != 0) {
+            result += b + "*log(x)";
         }
-         return result;
+        return result;
     }
 
     public String exp(double[][] data) {
@@ -184,25 +184,25 @@ public class ApproximationMethod {
             sum[0] += x * Math.log(y); //xlny
             sum[1] += x; //x
             sum[2] += Math.log(y); //lny
-            sum[3] +=Math.pow(x,2); //x2
+            sum[3] += Math.pow(x, 2); //x2
         }
 
-        double b =  Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1],2)),5);
-        double a =  Precision.round(1.0/data.length * sum[2] - b/data.length * sum[1],5);
-        String result ="e^("+a;
+        double b = Precision.round((data.length * sum[0] - sum[1] * sum[2]) / (data.length * sum[3] - Math.pow(sum[1], 2)), 5);
+        double a = Precision.round(1.0 / data.length * sum[2] - b / data.length * sum[1], 5);
+        String result = "e^(" + a;
         if (b >= 0) {
-                result+="+"+b+"* x)";
-            } else if (b!=0){
-                result+=b +"* x)";
-            }
+            result += "+" + b + "* x)";
+        } else if (b != 0) {
+            result += b + "* x)";
+        }
         return result;
     }
 
 
     private double determinant(double[][] a) {
-        double sum = a[0][0]*(a[1][1]*a[2][2]-a[1][2]*a[2][1]);
-        sum-= a[1][0]*(a[0][1]*a[2][2]-a[0][2]*a[2][1]);
-        sum+= a[2][0]*(a[0][1]*a[1][2]-a[0][2]*a[1][1]);
+        double sum = a[0][0] * (a[1][1] * a[2][2] - a[1][2] * a[2][1]);
+        sum -= a[1][0] * (a[0][1] * a[2][2] - a[0][2] * a[2][1]);
+        sum += a[2][0] * (a[0][1] * a[1][2] - a[0][2] * a[1][1]);
         return sum;
     }
 
