@@ -6,15 +6,12 @@ import java.awt.*;
 import java.util.Vector;
 
 public class MainView {
-    private JLabel errorLabel;
-    private JFrame window;
     private JPanel view;
     private JPanel panelChart;
     private JScrollPane panelWrapperTable;
     private JPanel panelTableAndInput;
-    private int width;
-    private int height;
     private JTextField countField;
+    private JLabel errorLabel;
     private JButton buttonSize;
     private JButton buttonChart;
     private ButtonGroup buttonGroup;
@@ -23,17 +20,14 @@ public class MainView {
 
     public MainView(int width, int height) {
 
-        this.width = width;
-        this.height = height;
         setElement();
-
-        window = new JFrame("Educational work №3");
+        JFrame window = new JFrame("Educational work №3");
         window.getContentPane().add(view);
-        setSetting();
+        setSetting(width,height, window);
 
     }
 
-    private void setSetting() {
+    private void setSetting(int width, int height, JFrame window) {
         window.setVisible(true);
         window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -49,7 +43,7 @@ public class MainView {
         GridBagConstraints baseConstraints = new GridBagConstraints();
         baseConstraints.anchor=GridBagConstraints.LAST_LINE_START;
 
-        JLabel descriptionLabel = new JLabel("Введите количество пар (минимально 4): ");
+        JLabel descriptionLabel = new JLabel("Введите количество пар значений");
         descriptionLabel.setFont(new Font(descriptionLabel.getFont().getName(), Font.BOLD, 14));
         countField = new JTextField(15);
 

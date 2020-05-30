@@ -28,14 +28,14 @@ class ChartController {
             }
             try {
                 double value = getCoefficient(x, function1);
-                view.getCoefficientFunction1Label().setText("Значение до апроксимации: " + value);
+                view.getCoefficientFunction1Label().setText("Значение до исключения точки: " + value);
             } catch (ArithmeticException e) {
                 view.getCoefficientFunction1Label().setText("Недопустимое значение x");
             }
 
             try {
                 double value = getCoefficient(x, function2);
-                view.getCoefficientFunction2Label().setText("Значение после апроксимации: " + value);
+                view.getCoefficientFunction2Label().setText("Значение после исключения точки: " + value);
             } catch (ArithmeticException e) {
                 view.getCoefficientFunction2Label().setText("Недопустимое значение x");
             }

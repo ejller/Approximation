@@ -13,7 +13,6 @@ public class MainController {
     private int sizeTable;
     private Type type;
     private int dropId;
-    private ApproximationMethod approximationMethod;
     private Chart chart;
 
     public MainController() {
@@ -72,7 +71,7 @@ public class MainController {
 
     private String getFunction(double[][] data) {
 
-        approximationMethod = new ApproximationMethod();
+        ApproximationMethod approximationMethod = new ApproximationMethod();
         String function;
 
         switch (view.getButtonGroup().getSelection().getActionCommand()) {
@@ -124,6 +123,7 @@ public class MainController {
     }
 
     private double[][] dropPoint(double[][] data, String function) {
+        ApproximationMethod approximationMethod = new ApproximationMethod();
         dropId = approximationMethod.findDropPointId(data, function);
         double[][] copyData = new double[data.length - 1][2];
         int offset = 0;
